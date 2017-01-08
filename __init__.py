@@ -16,21 +16,24 @@ def output(i, count, bv, func):
         o.append(str(i.condition) + ': ')
     else:
         comments = []
-        if i.operation == LLIL_PUSH and i.src.operation == LLIL_REG:
-            try:  ## temp0.d = eax ^ [gsbase + 0x14].d
-                c = str(func.get_reg_value_at(bv.arch, i.address, str(i.src)))
-                if not "undetermined" in c:
-                    comments.append(str(i.src)+":"+c)
-            except KeyError:
-                pass
+        try:
+            if i.operation == LLIL_PUSH and i.src.operation == LLIL_REG:
+                try:  ## temp0.d = eax ^ [gsbase + 0x14].d
+                    c = str(func.get_reg_value_at(bv.arch, i.address, str(i.src)))
+                    if not "undetermined" in c:
+                        comments.append(str(i.src)+":"+c)
+                except KeyError:
+                    pass
 
-        if i.operation_name.startswith('LLIL_SET_REG'):
-            try: ## temp0.d = eax ^ [gsbase + 0x14].d
-                c = str(func.get_reg_value_at(bv.arch, i.address, str(i.dest)))
-                if not "undetermined" in c:
-                    comments.append(str(i.dest)+":"+c)
-            except KeyError:
-                pass
+            if i.operation_name.startswith('LLIL_SET_REG'):
+                try: ## temp0.d = eax ^ [gsbase + 0x14].d
+                    c = str(func.get_reg_value_at(bv.arch, i.address, str(i.dest)))
+                    if not "undetermined" in c:
+                        comments.append(str(i.dest)+":"+c)
+                except KeyError:
+                    pass
+        except:
+            pass
 
         for t in i.tokens:
             if str(t).startswith('0x'):
