@@ -11,13 +11,13 @@ def output(i, count, bv, func):
     o = [str(i.instr_index).ljust(4), "0x{:x}    ".format(i.address), (INDENT*count)]
 
     # print i.tokens
-    if i.operation == LLIL_IF:
+    if i.operation == LowLevelILOperation.LLIL_IF:
         o.append('if ')
         o.append(str(i.condition) + ': ')
     else:
         comments = []
         try:
-            if i.operation == LLIL_PUSH and i.src.operation == LLIL_REG:
+            if i.operation == LowLevelILOperation.LLIL_PUSH and i.src.operation == LowLevelILOperation.LLIL_REG:
                 try:  ## temp0.d = eax ^ [gsbase + 0x14].d
                     c = str(func.get_reg_value_at(bv.arch, i.address, str(i.src)))
                     if not "undetermined" in c:
@@ -25,7 +25,7 @@ def output(i, count, bv, func):
                 except KeyError:
                     pass
 
-            if i.operation_name.startswith('LLIL_SET_REG'):
+            if i.operation_name.startswith('LowLevelILOperation.LLIL_SET_REG'):
                 try: ## temp0.d = eax ^ [gsbase + 0x14].d
                     c = str(func.get_reg_value_at(bv.arch, i.address, str(i.dest)))
                     if not "undetermined" in c:
@@ -64,7 +64,7 @@ def process_blocks(bv, func, blocks, mapping, data, count=0):
     for i in b:
         block_address = b.start
         # print i.tokens
-        if i.operation == LLIL_IF:
+        if i.operation == LowLevelILOperation.LLIL_IF:
             data.append(output(i, count, bv, func))
             true_block = mapping[i.true]
             if i.true > block_address:
@@ -87,7 +87,7 @@ def process_blocks(bv, func, blocks, mapping, data, count=0):
                 data.append(o)
             return
 
-        if i.operation == LLIL_GOTO:
+        if i.operation == LowLevelILOperation.LLIL_GOTO:
             data.append(output(i, count, bv, func))
             goto_block = mapping[i.dest]
             if i.dest > block_address:
