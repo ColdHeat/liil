@@ -1,7 +1,7 @@
 {
 	"plugin": {
 		"name": "LLIL",
-		"type": ["core", "ui", "architecture", "binaryview"],
+		"type": ["ui"],
 		"api": "python2",
 		"description": "Linear IL view for Binary Ninja",
 		"longdescription": "This is a super neat and nifty linear IL view for Binary Ninja. If you squint hard enough, it looks useful.",
